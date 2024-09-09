@@ -1,11 +1,15 @@
-.addButton{
+.addButton {
     margin-left: 20px;
 }
 
-.myCol{
+.myCol {
     padding: 0 20px;
 }
 
-.list-group-item:hover{
+.list-group-item:hover {
     background-color: rgba(167, 249, 164, 0.521);
+}
+
+.list-group-item.disabled {
+    background-color: rgba(173, 173, 173, 0.646);
 }
