@@ -21,7 +21,7 @@ const setupEventListeners = () => {
     searchBar.addEventListener("change", (event) => {
         event.preventDefault();
         const searchValue = searchField.value;
-        const filteredList = pendingList.filter(item => item.includes(searchValue));
+        const filteredList = pendingList.filter(itemObj => itemObj.item.includes(searchValue));
         redisplayPending(filteredList);
     });
 };
