@@ -1,5 +1,5 @@
-const pendingList = [];
-const completedList = [];
+let pendingList = [];
+let completedList = [];
 
 const pendingListUl = document.getElementById("pendingList");
 const completedListUl = document.getElementById("completedList");
@@ -29,29 +29,41 @@ const setupEventListeners = () => {
 const getToDos = async () => {
     const todos = await db.get();
     todos.forEach(doc => {
-        const itemObj = doc.data();
+        const itemObj = { ...doc.data(), id: doc.id };
         if (itemObj.isComplete) {
-            completedList.push(itemObj.item);
+            console.log(itemObj);
+            completedList.push(itemObj);
         } else {
-            pendingList.push(itemObj.item);
+            pendingList.push(itemObj);
         }
     });
 };
 
 const completeItem = listItem => {
     const itemValue = listItem.innerHTML;
-    const pendingIndex = pendingList.indexOf(itemValue);
-    pendingList.splice(pendingIndex, 1);
-    completedList.push(itemValue);
+    const itemObj = {
+        item: itemValue,
+        isComplete: true,
+        id: listItem.id
+    };
+
+    db.doc(listItem.id).set({ isComplete: true }, { merge: true });
+
+    pendingList = pendingList.filter(item => item.id != listItem.id);
+
+    completedList.push(itemObj);
     redisplay();
 };
 
 const addPending = function (itemToAdd) {
     if (itemToAdd == "") return;
-
-    db.add({ item: itemToAdd, isComplete: false })
-        .then(() => {
-            pendingList.push(itemToAdd);
+    const itemObj = {
+        item: itemToAdd,
+        isComplete: false,
+    };
+    db.add(itemObj)
+        .then(addedItem => {
+            pendingList.push({ ...itemObj, id: addedItem.id });
             redisplayPending(pendingList);
         })
         .catch((error) => {
@@ -69,7 +81,8 @@ const redisplayPending = listToDisplay => {
 
     listToDisplay.forEach(itemToAdd => {
         var listItem = document.createElement("li");
-        listItem.appendChild(document.createTextNode(itemToAdd));
+        listItem.appendChild(document.createTextNode(itemToAdd.item));
+        listItem.id = itemToAdd.id;
         listItem.classList.add("list-group-item");
         listItem.addEventListener("click", () => completeItem(listItem));
         pendingListUl.appendChild(listItem);
@@ -81,7 +94,8 @@ const redisplayComplete = listToDisplay => {
 
     listToDisplay.forEach(itemToAdd => {
         var listItem = document.createElement("li");
-        listItem.appendChild(document.createTextNode(itemToAdd));
+        listItem.appendChild(document.createTextNode(itemToAdd.item));
+        listItem.id = itemToAdd.id;
         listItem.classList.add("list-group-item");
         listItem.classList.add("disabled");
         completedListUl.appendChild(listItem);
