@@ -31,7 +31,6 @@ const getToDos = async () => {
     todos.forEach(doc => {
         const itemObj = { ...doc.data(), id: doc.id };
         if (itemObj.isComplete) {
-            console.log(itemObj);
             completedList.push(itemObj);
         } else {
             pendingList.push(itemObj);
