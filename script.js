@@ -7,22 +7,24 @@ const addButton = document.getElementById("addItemButton");
 const inputField = document.getElementById("addItemInput");
 const searchField = document.getElementById("searchBar");
 
-addButton.addEventListener("click", (event) => {
-    event.preventDefault();
+firestore = firebase.firestore();
 
-    let newItem = inputField.value;
-    addPending(newItem);
-    inputField.value = "";
-});
+const setupEventListeners = () => {
+    addButton.addEventListener("click", (event) => {
+        event.preventDefault();
 
-const searchBar = document.getElementById("searchBar");
-searchBar.addEventListener("change", (event) => {
-    event.preventDefault();
-    const searchValue = searchField.value;
-    const filteredList = pendingList.filter(item => item.includes(searchValue));
-    console.log(filteredList);
-    redisplayPending(filteredList);
-});
+        let newItem = inputField.value;
+        addPending(newItem);
+        inputField.value = "";
+    });
+
+    searchBar.addEventListener("change", (event) => {
+        event.preventDefault();
+        const searchValue = searchField.value;
+        const filteredList = pendingList.filter(item => item.includes(searchValue));
+        redisplayPending(filteredList);
+    });
+};
 
 const completeItem = listItem => {
     pendingListUl.removeChild(listItem);
@@ -32,6 +34,13 @@ const completeItem = listItem => {
 
 const addPending = function (itemToAdd) {
     if (itemToAdd == "") return;
+    firestore.collection("todos").add({ item: itemToAdd, isComplete: false })
+        .then((docRef) => {
+            console.log("Document written with ID: ", docRef.id);
+        })
+        .catch((error) => {
+            console.error("Error adding document: ", error);
+        });;
     pendingList.push(itemToAdd);
     redisplayPending(pendingList);
 };
@@ -47,3 +56,5 @@ const redisplayPending = listToDisplay => {
         pendingListUl.appendChild(listItem);
     });
 };
+
+setupEventListeners();
