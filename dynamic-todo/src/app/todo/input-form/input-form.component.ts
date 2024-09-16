@@ -18,10 +18,6 @@ export class InputFormComponent {
 
 	newItemEvent = output<string>();
 
-	search() {
-		console.dir(this.searchInput())
-	}
-
 	addItem() {
 		this.todoService.addItem(this.todoInput())
 		this.todoInput.set("")
