@@ -1,0 +1,32 @@
+<form class="row justify-content-between mb-4">
+  <div class="col-12 col-md-6 mt-2">
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Search"
+      name="searchInput"
+      [(ngModel)]="searchInput"
+      (keyup)="search()"
+    />
+  </div>
+  <div class="col-12 col-md-6 mt-2">
+    <div class="input-group">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="To-Do"
+        name="addItemInput"
+        (keydown.enter)="addItem()"
+        [(ngModel)]="todoInput"
+      />
+      <button
+        class="btn btn-success"
+        type="button"
+        id="addItemButton"
+        (click)="addItem()"
+      >
+        +
+      </button>
+    </div>
+  </div>
+</form>

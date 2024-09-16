@@ -1,0 +1,6 @@
+<h2 class="text-center">{{ title() }}</h2>
+<ul class="list-group">
+  @for (item of items(); track item.id) {
+  <app-todo-item [item]="item" />
+  }
+</ul>
