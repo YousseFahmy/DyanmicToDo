@@ -3,13 +3,15 @@ import { TodoItem } from "./todoItem.model";
 
 @Injectable({ providedIn: "root" })
 export class TodoService {
-    items = signal<TodoItem[]>([
+    private items = signal<TodoItem[]>([
         { text: 'ABCDE', isComplete: false, id: 1 },
         { text: 'ABC123', isComplete: true, id: 2 },
         { text: 'Task 3', isComplete: true, id: 3 },
         { text: 'My Task', isComplete: false, id: 4 },
         { text: 'Hello World', isComplete: false, id: 5 },
     ])
+
+    public allItems = this.items.asReadonly()
 
     addItem(newItemText: string) {
         var newItem: TodoItem = {
