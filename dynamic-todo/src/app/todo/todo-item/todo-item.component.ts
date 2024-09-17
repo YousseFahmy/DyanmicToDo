@@ -10,12 +10,12 @@ import { TodoService } from '../todo.service';
   styleUrl: './todo-item.component.css'
 })
 export class TodoItemComponent {
-  todoService = inject(TodoService)
+  todoService = inject(TodoService);
   item = model.required<TodoItem>();
   complete = output<number>();
 
   completeItem() {
-    this.todoService.completeItem(this.item().id)
+    this.todoService.completeItem(this.item().id);
   }
 
 }
