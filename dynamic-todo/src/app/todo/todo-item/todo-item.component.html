@@ -1,0 +1,8 @@
+<li
+  class="list-group-item"
+  [id]="item().id"
+  [class.disabled]="item().isComplete"
+  (click)="completeItem()"
+>
+  {{ item().text }}
+</li>
